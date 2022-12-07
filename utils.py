@@ -1,5 +1,6 @@
 import numpy as np
 import math
+
 class Utils():
     @staticmethod
     def dDominant(X ):
@@ -32,3 +33,18 @@ class Utils():
                 if y<mini:
                     mini=y
         return mini
+    @staticmethod 
+    def solutionTomarix(x:np.ndarray=np.zeros((0,)),tamaño_malla:tuple=()): 
+        matrix=np.zeros(tamaño_malla)
+        count_x=1
+        count_y=1
+        for r in x:
+            if count_x==tamaño_malla[0]-2:
+                matrix[count_y][count_x]=r
+                count_y+=1
+                count_x=0
+            else:
+                matrix[count_y][count_x]=r
+        return matrix
+
+
