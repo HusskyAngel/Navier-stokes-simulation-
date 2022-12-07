@@ -1,5 +1,4 @@
 
-from _typeshed import Self
 
 
 class DiferenciasFinitas():
@@ -17,14 +16,14 @@ class DiferenciasFinitas():
     def __condicion(self,x,y):
         if x==0:
             return (self.v0x,"literal")
-        if y==0 or y==self.tamaño_malla[1]-1 or x==self.tamaño_malla[0]-1: 
+        elif y==0 or y==self.tamaño_malla[1]-1 or x==self.tamaño_malla[0]-1: 
             return (0, "literal")
-        if (x == self.beam1x[0] or x==self.beam1x[1]+1) and (y ==self.beam1y[0]or y==self.beam1y[1]+1):
+        elif (x == self.beam1x[0] or x==self.beam1x[1]+1) and (y ==self.beam1y[0]or y==self.beam1y[1]+1):
             return (0, "literal")
-        if (x == self.beam2x[0] or x==self.beam2x[1]+1) and (y ==self.beam2y[0] or y ==self.beam2y[1]+1):
+        elif (x == self.beam2x[0] or x==self.beam2x[1]+1) and (y ==self.beam2y[0] or y ==self.beam2y[1]+1):
             return (0, "literal")
         else:
-            return (1,str(x)+","+str(y))
+           return (1,str(x)+","+str(y))
 
     def terminos(self,px:int,py:int):
         #terminos={"valores":[ ],"etiqueta":[]}

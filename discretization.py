@@ -3,17 +3,29 @@ from dif_finitas import DiferenciasFinitas
 from utils import Utils
 
 class Discretizacion():
-    def __init__(self,tamaño_malla:tuple=(6,6),v0x:float=1 ) :
+    def __init__(self,tamaño_malla:tuple=(25,25),v0x:float=1,paso:float=1 ) :
         self.tamaño_malla=tamaño_malla
         self.v0x=v0x
-        self.paso=tamaño_malla[0]/tamaño_malla[1]
+        self.paso=paso
 
     def crearMatrizX(self):
-        a=np.zeros(((self.tamaño_malla[0]-1)*(self.tamaño_malla[1]-1), ))
+        a=[]
         b=[]
         dif=DiferenciasFinitas(paso=self.paso ,v0x= self.v0x,tamaño_malla=self.tamaño_malla)
-        for row in  range(1,self.tamaño_malla[0]-1):
-            for column in range(1,self.tamaño_malla[1]-1):
+        for column in  range(1,self.tamaño_malla[1]-1):
+            for row in range(1,self.tamaño_malla[0]-1):
+                p=np.zeros((self.tamaño_malla[0]-1) * (self.tamaño_malla[1]-1))
+                lit=1
+                dd=dif.terminos(row,column)
+                for val,et in zip(dd["valores"],dd["etiquetas"]):
+                    if et=="literal":
+                        continue
+                    else:
+                        px=Utils.getX(et)
+                        py=Utils.getY(et)
+                        p[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=val
+                b.append(lit)
+                a.append(p)
                
         a=np.array(a)
         b=np.array(b)

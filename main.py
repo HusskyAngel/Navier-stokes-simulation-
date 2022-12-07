@@ -6,7 +6,7 @@ from utils import Utils
 
 dis=Discretizacion()
 A,b=dis.crearMatrizX()
-print(Utils.dDominant((A+(-1*Utils.minimun(A))+1) *256))
+print(Utils.dDominant(A))
 print(A)
 imagen=Image.fromarray(A*562)
 imagen.show()

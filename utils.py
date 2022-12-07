@@ -3,7 +3,6 @@ import math
 class Utils():
     @staticmethod
     def dDominant(X ):
-        sizex,sizey=X.shape
         count=0
         for w in X: 
             if sum(w)-X[count][count]>X[count][count]:
@@ -12,8 +11,8 @@ class Utils():
         return True
     @staticmethod
     def getX(punto:str):
-       aux=punto.split(',') 
-       return int(aux[0])
+        aux=punto.split(',') 
+        return int(aux[0])
         
     @staticmethod
     def getY(punto:str):
