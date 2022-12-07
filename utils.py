@@ -1,5 +1,15 @@
-
+import numpy as np
+import math
 class Utils():
+    @staticmethod
+    def dDominant(X ):
+        sizex,sizey=X.shape
+        count=0
+        for w in X: 
+            if sum(w)-X[count][count]>X[count][count]:
+                return False
+            count+=1
+        return True
     @staticmethod
     def getX(punto:str):
        aux=punto.split(',') 
@@ -15,3 +25,11 @@ class Utils():
        return (x,y_max-y)
 
 
+    @staticmethod 
+    def minimun(m):
+        mini=math.inf
+        for  x in m:
+            for y in x:
+                if y<mini:
+                    mini=y
+        return mini
