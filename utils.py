@@ -39,17 +39,17 @@ class Utils():
         matrix=np.zeros((tamaño_malla[0]-2,tamaño_malla[1]-2),dtype=float)
         count=0
         count_y=0
-        print("________________________")
-        print(x.shape," xshape")
-        print("________________________")
-        while count<x.shape[0]-1:
-            for t in range(tamaño_malla[0]-2):
-                if type(x[t+count])!=float: 
-                    matrix[count_y][t]=0
-                else:
-                    matrix[count_y][t]=x[t+count]
-            count+=tamaño_malla[0]-2
-            count_y+=1
-        return matrix
-
+        print(x.shape)
+        for w in range(len(x)):
+            if w%(tamaño_malla[0]-2)==0: 
+                matrix[count_y][count]= x[w]
+                print("x ",count," y ", count_y)
+                print("here")
+                count=0
+                count_y+=1
+            else: 
+                matrix[count_y][count]= x[w]
+                print("x ",count," y ", count_y)
+                count+=1
+        print(matrix)
 
