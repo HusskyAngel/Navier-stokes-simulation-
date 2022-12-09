@@ -1,12 +1,13 @@
 import numpy as np
 import math
+import sys
 
 class Utils():
     @staticmethod
     def dDominant(X ):
         count=0
         for w in X: 
-            if sum(w)-X[count][count]>X[count][count]:
+            if sum(abs(w))-abs(X[count][count])>abs(X[count][count]):
                 return False
             count+=1
         return True
@@ -34,17 +35,15 @@ class Utils():
                     mini=y
         return mini
     @staticmethod 
-    def solutionTomarix(x:np.ndarray=np.zeros((0,)),tamaño_malla:tuple=()): 
-        matrix=np.zeros(tamaño_malla)
-        count_x=1
-        count_y=1
-        for r in x:
-            if count_x==tamaño_malla[0]-2:
-                matrix[count_y][count_x]=r
-                count_y+=1
-                count_x=0
-            else:
-                matrix[count_y][count_x]=r
+    def solutionTomarix(x:np.ndarray=np.zeros((0,)),tamaño_malla:tuple=(25,25)): 
+        matrix=np.zeros((tamaño_malla[0]-1,tamaño_malla[1]-1),dtype=float)
+        count=0
+        count_y=0
+        while count<x.shape[0]-1:
+            for t in range(tamaño_malla[0]-1):
+                matrix[count_y][t]=x[t+count]
+            count+=tamaño_malla[0]-1
+            count_y+=1
         return matrix
 
 

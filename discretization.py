@@ -14,12 +14,15 @@ class Discretizacion():
         dif=DiferenciasFinitas(paso=self.paso ,v0x= self.v0x,tamaño_malla=self.tamaño_malla)
         for column in  range(1,self.tamaño_malla[1]-1):
             for row in range(1,self.tamaño_malla[0]-1):
-                p=np.zeros((self.tamaño_malla[0]-1) * (self.tamaño_malla[1]-1))
+                p=np.zeros((self.tamaño_malla[0]-2) * (self.tamaño_malla[1]-2))
                 lit=1
                 dd=dif.terminos(row,column)
                 for val,et in zip(dd["valores"],dd["etiquetas"]):
                     if et=="literal":
-                        continue
+                        lit+=val
+                    elif et=="beam":
+                        p=dd["valores"]
+                        break
                     else:
                         px=Utils.getX(et)
                         py=Utils.getY(et)
@@ -27,6 +30,7 @@ class Discretizacion():
                 b.append(lit)
                 a.append(p)
                
-        a=np.array(a)
-        b=np.array(b)
+        a=np.array(a,dtype=object)
+
+        b=np.array(b,dtype=object)
         return (a,b)
