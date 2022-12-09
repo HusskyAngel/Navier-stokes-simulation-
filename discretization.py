@@ -19,18 +19,18 @@ class Discretizacion():
                 dd=dif.terminos(row,column)
                 for val,et in zip(dd["valores"],dd["etiquetas"]):
                     if et=="literal":
-                        lit+=val
+                        lit+=float(val)
                     elif et=="beam":
                         p=dd["valores"]
                         break
                     else:
                         px=Utils.getX(et)
                         py=Utils.getY(et)
-                        p[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=val
+                        p[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=float(val)
                 b.append(lit)
                 a.append(p)
                
-        a=np.array(a,dtype=object)
+        a=np.array(a,dtype=float)
 
-        b=np.array(b,dtype=object)
+        b=np.array(b,dtype=float)
         return (a,b)

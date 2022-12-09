@@ -10,8 +10,10 @@ class Metodos():
         return x
 
     @staticmethod
-    def GaussSeidel2(i,a,b,x):
+    def GaussSeidel2(i,a,b):
         #Finding length of a(3)       
+        print(b.shape)
+        x=np.array(np.zeros(b.shape),dtype=float)
         for l in range(i):
             n = len(a)
             # for loop for 3 times as to calculate x, y , z

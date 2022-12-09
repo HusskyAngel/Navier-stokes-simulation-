@@ -35,14 +35,20 @@ class Utils():
                     mini=y
         return mini
     @staticmethod 
-    def solutionTomarix(x:np.ndarray=np.zeros((0,)),tamaño_malla:tuple=(25,25)): 
-        matrix=np.zeros((tamaño_malla[0]-1,tamaño_malla[1]-1),dtype=float)
+    def solutionTomarix(x:np.ndarray,tamaño_malla:tuple=(25,25)): 
+        matrix=np.zeros((tamaño_malla[0]-2,tamaño_malla[1]-2),dtype=float)
         count=0
         count_y=0
+        print("________________________")
+        print(x.shape," xshape")
+        print("________________________")
         while count<x.shape[0]-1:
-            for t in range(tamaño_malla[0]-1):
-                matrix[count_y][t]=x[t+count]
-            count+=tamaño_malla[0]-1
+            for t in range(tamaño_malla[0]-2):
+                if type(x[t+count])!=float: 
+                    matrix[count_y][t]=0
+                else:
+                    matrix[count_y][t]=x[t+count]
+            count+=tamaño_malla[0]-2
             count_y+=1
         return matrix
 

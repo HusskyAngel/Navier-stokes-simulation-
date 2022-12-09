@@ -39,8 +39,8 @@ class DiferenciasFinitas():
                lambda x,y: (-1**self.__condicion(x,y-1)[0]*(2+(self.v0x*self.paso))/2, self.__condicion(x,y-1)[1])]      
 
         if self.__isBeam(px,py):
-            valores=[0 for r in range((self.tamaño_malla[0]-2)*(self.tamaño_malla[1]-2))]
-            valores[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=1
+            valores=np.zeros((self.tamaño_malla[0]-2)*(self.tamaño_malla[1]-2))
+            valores[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=float(1)
             etiqueta=["beam" for w in range(len(valores))]
             return {"valores": valores,"etiquetas":etiqueta}
         else:
