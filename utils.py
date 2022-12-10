@@ -40,16 +40,13 @@ class Utils():
         count=0
         count_y=0
         print(x.shape)
-        for w in range(len(x)):
-            if w%(tamaño_malla[0]-2)==0: 
-                matrix[count_y][count]= x[w]
-                print("x ",count," y ", count_y)
-                print("here")
+        for w in range(1,len(x)+1):
+            if w%(tamaño_malla[0]-2)==0 : 
+                matrix[count_y][count]= x[w-1]
                 count=0
                 count_y+=1
             else: 
-                matrix[count_y][count]= x[w]
-                print("x ",count," y ", count_y)
+                matrix[count_y][count]= x[w-1]
                 count+=1
-        print(matrix)
+        return matrix
 

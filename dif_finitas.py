@@ -14,7 +14,10 @@ class DiferenciasFinitas():
 
 
     def __condicion(self,x,y):
-        if x==0 or y==0 or x==self.tamaño_malla[0]-1 or y==self.tamaño_malla[1]-1:
+
+        if (x==0):
+            return (1,"literal")
+        elif  y==0 or x==self.tamaño_malla[0]-1 or y==self.tamaño_malla[1]-1:
             return (0,"literal")
         else:
            return (1,str(x)+","+str(y))
@@ -22,7 +25,7 @@ class DiferenciasFinitas():
     def __isBeam(self,px:int,py:int)->bool:
         if (px>=self.beam1x[0] and px<= self.beam1x[0]+self.beam1x[1]) and (py >= self.tamaño_malla[1]-self.beam1y[1]):
             return True
-        elif(px>=(self.tamaño_malla[0]-self.beam2x[0]))and (py <=self.beam2y[1]): 
+        elif(px>=(self.beam2x[0]))and (py <=self.beam2y[1]): 
             return True
         else:
             return False
