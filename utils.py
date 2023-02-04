@@ -1,8 +1,9 @@
 import numpy as np
-import math
-import sys
-
 class Utils():
+    @staticmethod 
+    def parsePosAFila(px:int,py:int,tamaño_malla:tuple)->int:
+        return (px)+(tamaño_malla[0]*py) 
+
     @staticmethod
     def dDominant(X ):
         count=0
@@ -11,42 +12,14 @@ class Utils():
                 return False
             count+=1
         return True
-    @staticmethod
-    def getX(punto:str):
-        aux=punto.split(',') 
-        return int(aux[0])
-        
-    @staticmethod
-    def getY(punto:str):
-       aux=punto.split(',') 
-       return int(aux[1])
 
     @staticmethod
-    def transform(x:int,y:int,y_max:int):
-       return (x,y_max-y)
-
-
-    @staticmethod 
-    def minimun(m):
-        mini=math.inf
-        for  x in m:
-            for y in x:
-                if y<mini:
-                    mini=y
-        return mini
-    @staticmethod 
-    def solutionTomarix(x:np.ndarray,tamaño_malla:tuple=(25,25)): 
-        matrix=np.zeros((tamaño_malla[0]-2,tamaño_malla[1]-2),dtype=float)
-        count=0
-        count_y=0
-        print(x.shape)
-        for w in range(1,len(x)+1):
-            if w%(tamaño_malla[0]-2)==0 : 
-                matrix[count_y][count]= x[w-1]
-                count=0
-                count_y+=1
-            else: 
-                matrix[count_y][count]= x[w-1]
+    def solutionTomarix(x:np.ndarray,tamaño_malla:tuple=(50,50)): 
+        matrix=np.zeros((tamaño_malla[1],tamaño_malla[0]),dtype=float)
+        count=0 
+        for y in range(len(matrix)):
+            for _x in range(len(matrix[0])):  
+                matrix[y][_x]=x[count]
                 count+=1
         return matrix
 

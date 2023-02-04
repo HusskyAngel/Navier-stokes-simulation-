@@ -1,36 +1,189 @@
 import numpy as np
-from dif_finitas import DiferenciasFinitas
+from mapa import Map 
 from utils import Utils
+import matplotlib.pyplot as plt 
 
-class Discretizacion():
-    def __init__(self,tamaño_malla:tuple=(25,25),v0x:float=1,paso:float=1 ) :
-        self.tamaño_malla=tamaño_malla
-        self.v0x=v0x
+
+                          
+class DiscretizacionX():
+
+    def __init__(self,mapa:np.ndarray, v0:float=9., paso:float=1):
+       self.mapa = mapa
+       self.v0=v0
+       self.paso=paso
+    
+    """
+    E_A=2
+    OUTLET_H=3
+    J=4
+    I=5
+    INLET_F=6
+    SURFACE_G=7
+    D=8
+    B=9
+    C=10
+    """
+
+    def  retornarDiscretizacion(self,px,py):
+        if self.mapa[py][px]==6:
+            return {"tipo":"literal","val":self.v0 }
+
+        elif self.mapa[py][px]==1:
+            return {"tipo":"ecuacion=1","val":[
+                                                  {"pos":(px,py),"n":-4},
+                                                  {"pos":(px+1,py),"n":(2-(self.v0*self.paso))/2},
+                                                  {"pos":(px-1,py),"n":(2+(self.v0*self.paso))/2},
+                                              ]
+                    }
+        else:
+            return {"tipo":"literal","val":0}
+
+###crear matrix
+class MatrizX():
+
+    def __init__(self,tamaño_malla:tuple=(50,50),paso:float=1.,v0:float=1.): 
+        self.tamaño_malla = tamaño_malla
+        self.mapa=Map(tamaño_malla).crearMapa()
+
         self.paso=paso
+        self.v0=v0
 
-    def crearMatrizX(self):
-        a=[]
+    def matriz(self):
+        A=[]
         b=[]
-        dif=DiferenciasFinitas(paso=self.paso ,v0x= self.v0x,tamaño_malla=self.tamaño_malla)
-        for column in  range(1,self.tamaño_malla[1]-1):
-            for row in range(1,self.tamaño_malla[0]-1):
-                p=np.zeros((self.tamaño_malla[0]-2) * (self.tamaño_malla[1]-2))
-                lit=1
-                dd=dif.terminos(row,column)
-                for val,et in zip(dd["valores"],dd["etiquetas"]):
-                    if et=="literal":
-                        lit+=float(val)
-                    elif et=="beam":
-                        p=dd["valores"]
-                        break
-                    else:
-                        px=Utils.getX(et)
-                        py=Utils.getY(et)
-                        p[(px-1)+((self.tamaño_malla[0]-2)*(py-1))]=float(val)
-                b.append(lit)
-                a.append(p)
-               
-        a=np.array(a,dtype=float)
+        dis=DiscretizacionX(v0=self.v0,paso=self.paso,mapa=self.mapa)
+        for y in range(self.tamaño_malla[1]): 
+            for x in range(self.tamaño_malla[0]):
+                dis_p=dis.retornarDiscretizacion(x,y)
+                if dis_p["tipo"]=="literal":
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    a[Utils.parsePosAFila(x,y,tamaño_malla=self.tamaño_malla)]=1
+                    A.append(a)
+                    b.append(dis_p["val"])
+                elif dis_p["tipo"]=="ecuacion=1":
+                    lit=0
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    for term in dis_p["val"]:
+                        aux_x,aux_y=term["pos"]
+                        aux_dis=dis.retornarDiscretizacion(aux_x,aux_y)
+                        if aux_dis["tipo"]!="literal":
+                            a[Utils.parsePosAFila(aux_x,aux_y,self.tamaño_malla)]=term["n"]
+                        else:
+                            lit+=-1*term["n"]
+                    A.append(a)
+                    b.append(lit)
+                elif dis_p["tipo"]=="ecuacion=0":
+                    lit=0
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    for term in dis_p["val"]:
+                        aux_x,aux_y=term["pos"]
+                        aux_dis=dis.retornarDiscretizacion(aux_x,aux_y)
+                        if aux_dis["tipo"]!="literal":
+                            a[Utils.parsePosAFila(aux_x,aux_y,self.tamaño_malla)]=term["n"]
+                        else:
+                            lit+=-1*term["n"]
+                    A.append(a)
+                    b.append(lit)
+                
+        return (np.array(A,dtype=float),np.array(b,dtype=float))
+                           
 
-        b=np.array(b,dtype=float)
-        return (a,b)
+class DiscretizacionY():
+
+    def __init__(self,mapa:np.ndarray, v0:float=9., paso:float=1):
+       self.mapa = mapa
+       self.v0=v0
+       self.paso=paso
+    
+    """
+    E_A=2
+    OUTLET_H=3
+    J=4
+    I=5
+    INLET_F=6
+    SURFACE_G=7
+    D=8
+    B=9
+    C=10
+    """
+
+    def  retornarDiscretizacion(self,px,py):
+        if self.mapa[py][px]==6:
+            return {"tipo":"literal","val":self.v0 }
+
+        elif self.mapa[py][px]==1:
+            
+            return {"tipo":"ecuacion=1","val":[
+                                                  {"pos":(px,py),"n":-4},
+                                                  {"pos":(px,py+1),"n":(2-(self.v0*self.paso))/2},
+                                                  {"pos":(px,py-1),"n":(2+(self.v0*self.paso))/2},
+                                              ]
+                    }
+        else:
+            return {"tipo":"literal","val":0}
+
+###crear matrix
+class MatrizY():
+ 
+    def __init__(self,tamaño_malla:tuple=(50,50),paso:float=1.,v0:float=1.): 
+        self.tamaño_malla = tamaño_malla
+        self.mapa=Map(tamaño_malla).crearMapa()
+
+        self.paso=paso
+        self.v0=v0
+
+    def matriz(self):
+        A=[]
+        b=[]
+        dis=DiscretizacionY(v0=self.v0,paso=self.paso,mapa=self.mapa)
+        for y in range(self.tamaño_malla[1]): 
+            for x in range(self.tamaño_malla[0]):
+                dis_p=dis.retornarDiscretizacion(x,y)
+                if dis_p["tipo"]=="literal":
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    a[Utils.parsePosAFila(x,y,tamaño_malla=self.tamaño_malla)]=1
+                    A.append(a)
+                    b.append(dis_p["val"])
+                elif dis_p["tipo"]=="ecuacion=1":
+                    lit=0
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    for term in dis_p["val"]:
+                        aux_x,aux_y=term["pos"]
+                        aux_dis=dis.retornarDiscretizacion(aux_x,aux_y)
+                        if aux_dis["tipo"]!="literal":
+                            a[Utils.parsePosAFila(aux_x,aux_y,self.tamaño_malla)]=term["n"]
+                        else:
+                            lit+=-1*term["n"]
+                    A.append(a)
+                    b.append(lit)
+                elif dis_p["tipo"]=="ecuacion=0":
+                    lit=0
+                    a=np.zeros((self.tamaño_malla[0]*self.tamaño_malla[1]))
+                    for term in dis_p["val"]:
+                        aux_x,aux_y=term["pos"]
+                        aux_dis=dis.retornarDiscretizacion(aux_x,aux_y)
+                        if aux_dis["tipo"]!="literal":
+                            a[Utils.parsePosAFila(aux_x,aux_y,self.tamaño_malla)]=term["n"]
+                        else:
+                            lit+=-1*term["n"]
+                    A.append(a)
+                    b.append(lit)
+                
+        return (np.array(A,dtype=float),np.array(b,dtype=float))
+                
+                           
+
+
+
+                
+
+
+
+
+
+                
+
+
+
+
+
