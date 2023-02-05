@@ -90,10 +90,11 @@ class MatrizX():
 
 class DiscretizacionY():
 
-    def __init__(self,mapa:np.ndarray, v0:float=9., paso:float=1):
+    def __init__(self,mapa:np.ndarray, v0:float=9., paso:float=1,mapaX:np.ndarray=np.array([])):
        self.mapa = mapa
        self.v0=v0
        self.paso=paso
+       self.mapaX=mapaX
     
     """
     E_A=2
@@ -119,23 +120,34 @@ class DiscretizacionY():
                                                   {"pos":(px,py-1),"n":(2+(self.v0*self.paso))/2},
                                               ]
                     }
+        #other discretizations 
+#        elif self.mapa[py][px]==9:
+#            return {"tipo":"literal","val":-2*(self.mapaX[py][px+1]-self.mapaX[py][px])}
+        elif self.mapaX[py][px]==10:
+            return {"tipo":"literal","val":-2*(self.mapaX[py+1][px]-self.mapaX[py][px])}
+        elif self.mapaX[py][px]==8:
+            return {"tipo":"literal","val":-2*(self.mapaX[py][px-1]-self.mapaX[py][px])}
+        elif self.mapaX[py][px]==4:
+            return {"tipo":"literal","val":-2*(self.mapaX[py+1][px]-self.mapaX[py][px])}
+        elif self.mapaX[py][px]==5:
+            return {"tipo":"literal","val":-2*(self.mapaX[py][px-1]-self.mapaX[py][px])}
         else:
             return {"tipo":"literal","val":0}
 
 ###crear matrix
 class MatrizY():
  
-    def __init__(self,tamaño_malla:tuple=(50,50),paso:float=1.,v0:float=1.): 
+    def __init__(self,tamaño_malla:tuple=(50,50),paso:float=1.,v0:float=1.,mapaX:np.ndarray=np.array([])): 
         self.tamaño_malla = tamaño_malla
         self.mapa=Map(tamaño_malla).crearMapa()
-
+        self.mapaX=mapaX
         self.paso=paso
         self.v0=v0
 
     def matriz(self):
         A=[]
         b=[]
-        dis=DiscretizacionY(v0=self.v0,paso=self.paso,mapa=self.mapa)
+        dis=DiscretizacionY(v0=self.v0,paso=self.paso,mapa=self.mapa,mapaX=self.mapaX)
         for y in range(self.tamaño_malla[1]): 
             for x in range(self.tamaño_malla[0]):
                 dis_p=dis.retornarDiscretizacion(x,y)

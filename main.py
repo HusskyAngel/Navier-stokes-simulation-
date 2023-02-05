@@ -19,14 +19,39 @@ m=Utils.solutionTomarix(sol_x,tamaño_malla=(50,50))
 """
 Eje y
 """
-w=MatrizY()
+w=MatrizY(mapaX=m)
 A_y,b_y=w.matriz()
 sol_y=Metodos.GaussSeidel2(25,A_y,b_y)
 w=Utils.solutionTomarix(sol_y,tamaño_malla=(50,50))
 
 
 """
-Plot
+plot equation matrix
+"""
+plt.imshow(A_x)
+plt.show()
+
+
+"""
+Plot  
+"""
+fig,(ax1,ax2)=plt.subplots(1,2)
+
+imx=ax1.imshow(m)
+imy=ax2.imshow(w)
+
+cbarx=fig.colorbar(imx,ax=ax1)
+cbary=fig.colorbar(imy,ax=ax2)
+
+ax1.set_title("Eje X")
+ax2.set_title("Eje Y")
+
+plt.show()
+
+
+
+"""
+Plot splines 
 """
 fig,(ax1,ax2)=plt.subplots(1,2)
 

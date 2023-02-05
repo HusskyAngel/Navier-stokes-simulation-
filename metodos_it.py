@@ -8,7 +8,7 @@ class AuxMetodos():
 class Metodos(): 
 
     @staticmethod
-    def GaussSeidel2(i,a,b,tol:float=0.03):
+    def GaussSeidel2(i,a,b,tol:float=0.003):
         rng = np.random.default_rng(seed=42)
         x=np.array(rng.random(b.shape),dtype=float)
         x_minus=np.zeros((len(x))) 
